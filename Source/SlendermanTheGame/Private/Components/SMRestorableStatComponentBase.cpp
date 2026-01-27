@@ -23,7 +23,6 @@ void USMRestorableStatComponentBase::Spend()
 	{
 		GEngine->AddOnScreenDebugMessage(1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%s no resource %f/%f"), *GetClass()->GetName(), RestorableUnit.CurrentValue, RestorableUnit.MaxValue));
 	}
-
 }
 
 void USMRestorableStatComponentBase::Restore()

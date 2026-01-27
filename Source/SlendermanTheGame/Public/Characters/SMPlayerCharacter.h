@@ -10,11 +10,10 @@ class UInputMappingContext;
 class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
-class USMRestorableStatComponentBase;
+class USMStaminaComponent;
+class USMMindComponent;
 struct FInputActionValue;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnJumpStarted);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnJumpStoped);
 
 UCLASS()
 class SLENDERMANTHEGAME_API ASMPlayerCharacter : public ACharacter
@@ -22,12 +21,6 @@ class SLENDERMANTHEGAME_API ASMPlayerCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintAssignable, Category = "Character|Jump")
-	FOnJumpStarted OnJumpStarted;
-
-	UPROPERTY(BlueprintAssignable, Category = "Character|Jump")
-	FOnJumpStoped OnJumpStoped;
-
 	ASMPlayerCharacter();
 
 	virtual void Tick(float DeltaTime) override;
@@ -43,10 +36,10 @@ protected:
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USMRestorableStatComponentBase* StaminaComponent;
+	USMStaminaComponent* StaminaComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USMRestorableStatComponentBase* MindComponent;
+	USMMindComponent* MindComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* InputMapping;
@@ -70,8 +63,6 @@ protected:
 	float InteractDistance = 300.0f;
 
 	virtual void BeginPlay() override;
-	virtual void Jump() override;
-	virtual void StopJumping() override;
 
 private:
 	void Move(const FInputActionValue& Value);

@@ -14,9 +14,5 @@ class SLENDERMANTHEGAME_API USMStaminaComponent : public USMRestorableStatCompon
 {
 	GENERATED_BODY()
 public:
-	USMStaminaComponent();
 	virtual void BeginPlay() override;
-private:
-	void OnJumpStarted();
-	void OnJumpStoped();
 };

@@ -43,28 +43,6 @@ void ASMPlayerCharacter::BeginPlay()
 
 }
 
-void ASMPlayerCharacter::Jump()
-{
-	Super::Jump();
-
-	if (OnJumpStarted.IsBound())
-	{
-		GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("Start jumping broadcasted!"));
-		OnJumpStarted.Broadcast();
-	}
-}
-
-void ASMPlayerCharacter::StopJumping()
-{
-	Super::StopJumping();
-
-	if (OnJumpStoped.IsBound())
-	{
-		GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("Stop jumping broadcasted!"));
-		OnJumpStoped.Broadcast();
-	}
-}
-
 // Called every frame
 void ASMPlayerCharacter::Tick(float DeltaTime)
 {
@@ -89,8 +67,8 @@ void ASMPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 
 		if (!JumpAction) return;
-		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::Jump);
-		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ASMPlayerCharacter::StopJumping);
+		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		Input->BindAction(RunAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::StartRun);
 		Input->BindAction(RunAction, ETriggerEvent::Completed, this, &ASMPlayerCharacter::StopRun);
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASMPlayerCharacter::Move);
@@ -150,9 +128,9 @@ void ASMPlayerCharacter::Interact()
 
 void ASMPlayerCharacter::StartRun()
 {
+	if (!StaminaComponent && !StaminaComponent->CanBeUsed()) return;
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (StaminaComponent)
-		StaminaComponent->StartUsingResource();
+	StaminaComponent->StartUsingResource();
 }
 
 void ASMPlayerCharacter::StopRun()
