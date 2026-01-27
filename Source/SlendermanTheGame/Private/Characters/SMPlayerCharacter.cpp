@@ -6,9 +6,11 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Interactables/SMInteractableBase.h"
+#include "Components/SMStaminaComponent.h"
+#include "Components/SMMindComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ASMPlayerCharacter::ASMPlayerCharacter()
@@ -29,6 +31,9 @@ ASMPlayerCharacter::ASMPlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->bUsePawnControlRotation = false;
 
+	StaminaComponent = CreateDefaultSubobject<USMStaminaComponent>("StaminaComponent");
+	MindComponent = CreateDefaultSubobject<USMMindComponent>("MindComponent");
+
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +41,28 @@ void ASMPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void ASMPlayerCharacter::Jump()
+{
+	Super::Jump();
+
+	if (OnJumpStarted.IsBound())
+	{
+		GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("Start jumping broadcasted!"));
+		OnJumpStarted.Broadcast();
+	}
+}
+
+void ASMPlayerCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	if (OnJumpStoped.IsBound())
+	{
+		GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("Stop jumping broadcasted!"));
+		OnJumpStoped.Broadcast();
+	}
 }
 
 // Called every frame
@@ -62,8 +89,10 @@ void ASMPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 
 		if (!JumpAction) return;
-		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::Jump);
+		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ASMPlayerCharacter::StopJumping);
+		Input->BindAction(RunAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::StartRun);
+		Input->BindAction(RunAction, ETriggerEvent::Completed, this, &ASMPlayerCharacter::StopRun);
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASMPlayerCharacter::Move);
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASMPlayerCharacter::Look);
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::Interact);
@@ -101,7 +130,7 @@ void ASMPlayerCharacter::Interact()
 	QueryParams.AddIgnoredActor(this);
 	QueryParams.bTraceComplex = true;
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,Start,End,ECollisionChannel::ECC_Visibility,QueryParams);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_Visibility, QueryParams);
 #if WITH_EDITOR
 	DrawDebugLine(GetWorld(), Start, End, bHit ? FColor::Green : FColor::Red, false, 2.0f, 0, 1.0f);
 	if (bHit)
@@ -117,5 +146,30 @@ void ASMPlayerCharacter::Interact()
 		}
 	}
 
+}
+
+void ASMPlayerCharacter::StartRun()
+{
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (StaminaComponent)
+		StaminaComponent->StartUsingResource();
+}
+
+void ASMPlayerCharacter::StopRun()
+{
+	if (StaminaComponent)
+		StaminaComponent->StopUsingResource();
+}
+
+void ASMPlayerCharacter::LoseMind()
+{
+	if (MindComponent)
+		MindComponent->StartUsingResource();
+}
+
+void ASMPlayerCharacter::RegainMind()
+{
+	if (MindComponent)
+		MindComponent->StopUsingResource();
 }
 
