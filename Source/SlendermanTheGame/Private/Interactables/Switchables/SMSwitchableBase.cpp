@@ -17,8 +17,16 @@ void ASMSwitchableBase::Interact(ASMPlayerCharacter* Player)
 
 void ASMSwitchableBase::TurnOff()
 {
+	IsTurnedOff = true;
 }
 
 void ASMSwitchableBase::TurnOn()
 {
+	IsTurnedOff = false;
+}
+
+void ASMSwitchableBase::BeginPlay()
+{
+	Super::BeginPlay();
+	// проверить на наличие владельца
 }

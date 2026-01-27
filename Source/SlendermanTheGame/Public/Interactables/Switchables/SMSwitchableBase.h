@@ -7,16 +7,24 @@
 #include "SMSwitchableBase.generated.h"
 
 
+
+class ASMInteractableSwitch;
+
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class SLENDERMANTHEGAME_API ASMSwitchableBase : public ASMInteractableBase
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	virtual void Interact(ASMPlayerCharacter* Player);
 protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lighting")
+	bool IsTurnedOff = false;
+
+	virtual void BeginPlay() override;
 	virtual void TurnOff();
 	virtual void TurnOn();
-	bool IsTurnedOff = false;
+private:
+	ASMInteractableSwitch* Owner;
 };

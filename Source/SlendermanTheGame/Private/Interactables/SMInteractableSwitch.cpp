@@ -5,4 +5,10 @@
 
 void ASMInteractableSwitch::Interact(ASMPlayerCharacter* Player)
 {
+	//вызвает interact у всех элементов массива
+}
+
+void ASMInteractableSwitch::BeginPlay()
+{
+	// обозначает владельцев у ламп
 }
