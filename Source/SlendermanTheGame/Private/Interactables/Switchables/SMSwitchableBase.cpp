@@ -2,31 +2,68 @@
 
 
 #include "Interactables/Switchables/SMSwitchableBase.h"
+#include "Interactables/SMInteractableSwitch.h"
 
-void ASMSwitchableBase::Interact(ASMPlayerCharacter* Player)
+#if WITH_EDITOR
+#include "Editor.h"
+#endif
+
+ASMSwitchableBase::ASMSwitchableBase()
 {
-	if (IsTurnedOff)
+	PrimaryActorTick.bCanEverTick = false;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
+	StaticMesh->SetupAttachment(GetRootComponent());
+
+	SwitchOwner = nullptr;
+	bIsActivated = false;
+}
+
+ASMInteractableSwitch* ASMSwitchableBase::GetSwitchOwner() const
+{
+	return SwitchOwner;
+}
+
+void ASMSwitchableBase::SetSwitchOwner(ASMInteractableSwitch* Value)
+{
+	if (SwitchOwner != Value)
 	{
-		TurnOn();
+		SwitchOwner = Value;
+
+		if (SwitchOwner)
+		{
+			SetOwner(SwitchOwner);
+
+			SwitchOwner->IsSwitchActivated() ? TurnOn() : TurnOff();
+		}
 	}
-	else
-	{
-		TurnOff();
-	}
+	
 }
 
 void ASMSwitchableBase::TurnOff()
 {
-	IsTurnedOff = true;
+	bIsActivated = false;
+	OnTurnedOff();
 }
 
 void ASMSwitchableBase::TurnOn()
 {
-	IsTurnedOff = false;
+	bIsActivated = true;
+	OnTurnedOn();
 }
+
+#if WITH_EDITOR
+void ASMSwitchableBase::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	MarkComponentsRenderStateDirty();
+}
+#endif
 
 void ASMSwitchableBase::BeginPlay()
 {
 	Super::BeginPlay();
-	// проверить на наличие владельца
 }
+
+

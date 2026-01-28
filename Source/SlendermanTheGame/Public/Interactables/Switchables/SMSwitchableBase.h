@@ -3,28 +3,53 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interactables/SMInteractableBase.h"
+#include "GameFramework/Actor.h"
 #include "SMSwitchableBase.generated.h"
 
-
-
 class ASMInteractableSwitch;
+class UStaticMeshComponent;
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class SLENDERMANTHEGAME_API ASMSwitchableBase : public ASMInteractableBase
+class SLENDERMANTHEGAME_API ASMSwitchableBase : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	virtual void Interact(ASMPlayerCharacter* Player);
-protected:
+	ASMSwitchableBase();
+	
+	UFUNCTION(BlueprintCallable, Category = "Switchable|Owner")
+	ASMInteractableSwitch* GetSwitchOwner() const;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lighting")
-	bool IsTurnedOff = false;
+	UFUNCTION(BlueprintCallable, Category = "Switchable|Owner")
+	void SetSwitchOwner(ASMInteractableSwitch* Value);
 
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable, Category = "Switchable")
+	bool IsActivated() const { return bIsActivated; }
+
 	virtual void TurnOff();
 	virtual void TurnOn();
+
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+	
+protected:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Switchable")
+	bool bIsActivated;
+
+	virtual void BeginPlay() override;
+	
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "Switchable")
+	void OnTurnedOn();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Switchable")
+	void OnTurnedOff();
+
 private:
-	ASMInteractableSwitch* Owner;
+	ASMInteractableSwitch* SwitchOwner;
 };

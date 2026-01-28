@@ -11,6 +11,7 @@
 #include "Components/SMStaminaComponent.h"
 #include "Components/SMMindComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/SMCharacterMovementComponent.h"
 
 // Sets default values
 ASMPlayerCharacter::ASMPlayerCharacter()
@@ -131,12 +132,14 @@ void ASMPlayerCharacter::StartRun()
 	if (!StaminaComponent && !StaminaComponent->CanBeUsed()) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	StaminaComponent->StartUsingResource();
+	bWantsToRun = true;
 }
 
 void ASMPlayerCharacter::StopRun()
 {
 	if (StaminaComponent)
 		StaminaComponent->StopUsingResource();
+	bWantsToRun = false;
 }
 
 void ASMPlayerCharacter::LoseMind()
@@ -151,3 +154,7 @@ void ASMPlayerCharacter::RegainMind()
 		MindComponent->StopUsingResource();
 }
 
+bool ASMPlayerCharacter::IsMustRun() const
+{
+	return StaminaComponent->CanBeUsed() && bWantsToRun;
+}

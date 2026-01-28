@@ -6,19 +6,22 @@
 #include "Interactables/Switchables/SMSwitchableBase.h"
 #include "SMSwitchableLamp.generated.h"
 
-class ALight;
+class UPointLightComponent;
 
 UCLASS()
 class SLENDERMANTHEGAME_API ASMSwitchableLamp : public ASMSwitchableBase
 {
 	GENERATED_BODY()
+
+public:
+	ASMSwitchableLamp();
 protected:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lighting")
-	ALight* LightingSource;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lighting")
+	UPointLightComponent* LightingSource;
 
 	virtual void TurnOff() override;
 	virtual void TurnOn() override;
 private:
-	// изменение свойств для источника света
+	void ChangeLightingSourceVisibility(bool bIsVisible);
 };
