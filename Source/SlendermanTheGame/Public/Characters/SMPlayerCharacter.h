@@ -62,7 +62,7 @@ protected:
 	UInputAction* RunAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction")
-	float InteractDistance = 300.0f;
+	float InteractDistance = 250.0f;
 
 	virtual void BeginPlay() override;
 

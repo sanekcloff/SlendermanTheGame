@@ -11,7 +11,8 @@
 #include "Components/SMStaminaComponent.h"
 #include "Components/SMMindComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Components/SMCharacterMovementComponent.h"
+#include "Gamemodes/SMGameStateBase.h"
+#include "Interactables/SMInteractableNote.h"
 
 // Sets default values
 ASMPlayerCharacter::ASMPlayerCharacter()
@@ -41,14 +42,12 @@ ASMPlayerCharacter::ASMPlayerCharacter()
 void ASMPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
 void ASMPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -66,7 +65,6 @@ void ASMPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-
 		if (!JumpAction) return;
 		Input->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		Input->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -121,10 +119,9 @@ void ASMPlayerCharacter::Interact()
 	{
 		if (ASMInteractableBase* InteractableObject = Cast<ASMInteractableBase>(HitResult.GetActor()))
 		{
-			InteractableObject->Interact(this);
+				InteractableObject->Interact(this);
 		}
 	}
-
 }
 
 void ASMPlayerCharacter::StartRun()

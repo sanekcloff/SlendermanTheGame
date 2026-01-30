@@ -20,7 +20,7 @@ public class SlendermanTheGame : ModuleRules
 
 		if(Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealED" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
 		}
 
 		// Uncomment if you are using Slate UI

@@ -3,9 +3,13 @@
 
 #include "Gamemodes/SMGameModeBase.h"
 #include "Characters/SMPlayerCharacter.h"
+#include "Gamemodes/SMGameStateBase.h"
+#include "UI/SMPlayerHUD.h"
 
 
 ASMGameModeBase::ASMGameModeBase()
 {
-	DefaultPawnClass = ASMGameModeBase::StaticClass();
+	DefaultPawnClass = ASMPlayerCharacter::StaticClass();
+	GameStateClass = ASMGameStateBase::StaticClass();
+	HUDClass = ASMPlayerHUD::StaticClass();
 }
