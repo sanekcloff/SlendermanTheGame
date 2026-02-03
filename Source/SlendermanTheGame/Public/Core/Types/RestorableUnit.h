@@ -6,7 +6,7 @@
 #include "RestorableUnit.generated.h"
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Blueprintable)
 struct SLENDERMANTHEGAME_API FRestorableUnit
 {
 	GENERATED_BODY()

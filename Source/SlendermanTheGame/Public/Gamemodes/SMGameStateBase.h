@@ -36,6 +36,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Notes")
 	int32 GetInGameNotesAmount() const;
 
+	// for debuging
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+	void StartGame();
+
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+	void PauseGame();
+
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+	void EndGame();
 
 
 protected:
@@ -46,7 +55,7 @@ protected:
 	void OnCollectedNotesIncreased();
 
 private:
-	ESMGameState GameState = ESMGameState::WaitingToStart;
+	ESMGameState GameState;
 	int32 CollectedNotesAmount;
 	int32 InGameNotesAmount;
 

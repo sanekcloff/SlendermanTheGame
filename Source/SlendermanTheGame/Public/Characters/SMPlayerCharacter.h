@@ -29,6 +29,10 @@ public:
 
 	bool IsMustRun() const;
 
+	USMStaminaComponent* GetStaminaComponent() const {
+		return StaminaComponent;
+	};
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

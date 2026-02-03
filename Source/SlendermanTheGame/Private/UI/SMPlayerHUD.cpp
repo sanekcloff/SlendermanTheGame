@@ -15,8 +15,8 @@ void ASMPlayerHUD::BeginPlay()
 	Super::BeginPlay();
 
 	GameWidgets.Add(ESMGameState::InProgress, CreateWidget<USMBaseWidget>(GetWorld(), PlayerHudWidgetClass));
-	GameWidgets.Add(ESMGameState::Paused, CreateWidget<USMBaseWidget>(GetWorld(), PlayerHudWidgetClass));
-	GameWidgets.Add(ESMGameState::GameOver, CreateWidget<USMBaseWidget>(GetWorld(), PlayerHudWidgetClass));
+	GameWidgets.Add(ESMGameState::Paused, CreateWidget<USMBaseWidget>(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(ESMGameState::GameOver, CreateWidget<USMBaseWidget>(GetWorld(), GameOverWidgetClass));
 
 	for (auto GameWidgetPair : GameWidgets)
 	{
@@ -31,7 +31,7 @@ void ASMPlayerHUD::BeginPlay()
 		const auto GameState = Cast<ASMGameStateBase>(GetWorld()->GetGameState());
 		if (GameState)
 		{
-			GameState->OnGameStateChanged.AddUObject(this,&ASMPlayerHUD::OnGameStateChanged);
+			GameState->OnGameStateChanged.AddUObject(this, &ASMPlayerHUD::OnGameStateChanged);
 		}
 	}
 }
