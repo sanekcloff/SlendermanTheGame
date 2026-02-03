@@ -12,8 +12,6 @@ USMPlayerHudWidget::USMPlayerHudWidget()
 	StaminaGoodColor = FLinearColor::Yellow;
 	StaminaBadColor = FLinearColor::Red;
 	PercentColorThreshold = 0.3f;
-	if (StaminaProgressBar)
-		StaminaProgressBar->SetFillColorAndOpacity(StaminaGoodColor);
 }
 
 float USMPlayerHudWidget::GetStaminaPercent() const
@@ -57,11 +55,18 @@ int32 USMPlayerHudWidget::GetInGameNotesValue() const
 void USMPlayerHudWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	if (StaminaProgressBar)
+	{
+		StaminaProgressBar->SetFillColorAndOpacity(StaminaGoodColor);
+	}
+
 	if (const ASMPlayerCharacter* PlayerCharacter = Cast<ASMPlayerCharacter>(GetOwningPlayerPawn()))
 	{
 		USMStaminaComponent* StaminaComponent = PlayerCharacter->GetStaminaComponent();
 		StaminaComponent->OnValueChanged.AddUniqueDynamic(this, &USMPlayerHudWidget::OnStaminaChanged);
 	}
+	
 }
 
 void USMPlayerHudWidget::UpdateStaminaProgressBar()

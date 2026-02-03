@@ -27,25 +27,17 @@ public:
 
 	ASMGameStateBase();
 
-	UFUNCTION(BlueprintCallable, Category = "Notes")
+	UFUNCTION(BlueprintCallable, Category = "GameSession|Notes")
 	int32 GetCollectedNotesAmount() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Notes")
+	UFUNCTION(BlueprintCallable, Category = "GameSession|Notes")
 	void IncreaseCollectedNotesAmount();
 
-	UFUNCTION(BlueprintCallable, Category = "Notes")
+	UFUNCTION(BlueprintCallable, Category = "GameSession|Notes")
 	int32 GetInGameNotesAmount() const;
 
-	// for debuging
-	UFUNCTION(BlueprintCallable, Category = "GameState")
-	void StartGame();
-
-	UFUNCTION(BlueprintCallable, Category = "GameState")
-	void PauseGame();
-
-	UFUNCTION(BlueprintCallable, Category = "GameState")
-	void EndGame();
-
+	UFUNCTION(BlueprintCallable, Category = "GameSession|State")
+	void SetGameState(ESMGameState State);
 
 protected:
 
@@ -61,6 +53,5 @@ private:
 
 	int32 CalculateInGameNotes();
 	bool IsAllNotesAreCollected();
-	void SetGameState(ESMGameState State);
 
 };

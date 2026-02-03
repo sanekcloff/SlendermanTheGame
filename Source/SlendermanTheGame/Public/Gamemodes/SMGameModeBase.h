@@ -16,4 +16,15 @@ class SLENDERMANTHEGAME_API ASMGameModeBase : public AGameModeBase
 	
 public:
 	ASMGameModeBase();
+	UFUNCTION(BlueprintCallable, Category = "GameSession|State")
+	void StartGame();
+	UFUNCTION(BlueprintCallable, Category = "GameSession|State")
+	void EndGame();
+
+	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
+
+	virtual bool ClearPause() override;
+private:
+	UFUNCTION()
+	ASMGameStateBase* GetSMGameStateBase() const;
 };

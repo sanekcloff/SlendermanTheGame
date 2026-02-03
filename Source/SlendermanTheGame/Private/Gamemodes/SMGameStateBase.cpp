@@ -4,6 +4,7 @@
 #include "Gamemodes/SMGameStateBase.h"
 #include "Interactables/SMInteractableNote.h"
 #include "Kismet/GameplayStatics.h"
+#include "Gamemodes/SMGameModeBase.h"
 
 ASMGameStateBase::ASMGameStateBase()
 {
@@ -29,49 +30,24 @@ int32 ASMGameStateBase::GetInGameNotesAmount() const
 	return InGameNotesAmount;
 }
 
-// for debuging
-void ASMGameStateBase::StartGame()
-{
-	SetGameState(ESMGameState::InProgress);
-	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
-	{
-		PC->SetInputMode(FInputModeGameOnly());
-		PC->bShowMouseCursor = false;
-	}
-}
-
-void ASMGameStateBase::PauseGame()
-{
-	SetGameState(ESMGameState::Paused);
-	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
-	{
-		PC->SetInputMode(FInputModeUIOnly());
-		PC->bShowMouseCursor = true;
-	}
-}
-
-void ASMGameStateBase::EndGame()
-{
-	SetGameState(ESMGameState::GameOver);
-	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
-	{
-		PC->SetInputMode(FInputModeUIOnly());
-		PC->bShowMouseCursor = true;
-	}
-}
-
 void ASMGameStateBase::BeginPlay()
 {
 	Super::BeginPlay();
 	InGameNotesAmount = CalculateInGameNotes();
 	GEngine->AddOnScreenDebugMessage(100, 5.0f, FColor::Cyan, FString::Printf(TEXT("%d notes in world"), InGameNotesAmount));
-	StartGame();
 }
 
 void ASMGameStateBase::OnAllNotesCollected()
 {
 	GEngine->AddOnScreenDebugMessage(100, 5.0f, FColor::Cyan, FString::Printf(TEXT("Complete %d/%d collected"), CollectedNotesAmount, InGameNotesAmount));
-	EndGame();
+	if (GetWorld())
+	{
+		if (auto GameMode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			GameMode->EndGame();
+		}
+		
+	}
 }
 
 void ASMGameStateBase::OnCollectedNotesIncreased()

@@ -4,6 +4,7 @@
 #include "UI/SMPlayerHUD.h"
 #include "Gamemodes/SMGameStateBase.h"
 #include "UI/SMBaseWidget.h"
+#include "Gamemodes/SMGameModeBase.h"
 
 void ASMPlayerHUD::DrawHUD()
 {
@@ -28,10 +29,13 @@ void ASMPlayerHUD::BeginPlay()
 	}
 	if (GetWorld())
 	{
-		const auto GameState = Cast<ASMGameStateBase>(GetWorld()->GetGameState());
-		if (GameState)
+		if (const auto GameState = Cast<ASMGameStateBase>(GetWorld()->GetGameState()))
 		{
 			GameState->OnGameStateChanged.AddUObject(this, &ASMPlayerHUD::OnGameStateChanged);
+		}
+		if (auto Gamemode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			Gamemode->StartGame();
 		}
 	}
 }
