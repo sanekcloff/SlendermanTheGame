@@ -18,6 +18,9 @@ protected:
 	UButton* TestLevelButton;
 
 	UPROPERTY(meta = (BindWidget))
+	UButton* GameLevelButton;
+
+	UPROPERTY(meta = (BindWidget))
 	UButton* QuitButton;
 
 	virtual void NativeOnInitialized() override;
@@ -26,6 +29,8 @@ private:
 
 	UFUNCTION()
 	void OnTestLevelButtonClicked();
+	UFUNCTION()
+	void OnGameLevelButtonClicked();
 	UFUNCTION()
 	void OnQuitButtonClicked();
 

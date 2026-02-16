@@ -34,16 +34,18 @@ void ASMGameStateBase::BeginPlay()
 {
 	Super::BeginPlay();
 	InGameNotesAmount = CalculateInGameNotes();
-	GEngine->AddOnScreenDebugMessage(100, 5.0f, FColor::Cyan, FString::Printf(TEXT("%d notes in world"), InGameNotesAmount));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("%d notes in world"), InGameNotesAmount));
+	if (InGameNotesAmount == 0) OnAllNotesCollected();
 }
 
 void ASMGameStateBase::OnAllNotesCollected()
 {
-	GEngine->AddOnScreenDebugMessage(100, 5.0f, FColor::Cyan, FString::Printf(TEXT("Complete %d/%d collected"), CollectedNotesAmount, InGameNotesAmount));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("Complete %d/%d collected"), CollectedNotesAmount, InGameNotesAmount));
 	if (GetWorld())
 	{
 		if (auto GameMode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
 		{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("End game called")));
 			GameMode->EndGame();
 		}
 		
@@ -52,7 +54,7 @@ void ASMGameStateBase::OnAllNotesCollected()
 
 void ASMGameStateBase::OnCollectedNotesIncreased()
 {
-	GEngine->AddOnScreenDebugMessage(100, 5.0f, FColor::Cyan, FString::Printf(TEXT("%d/%d collected"), CollectedNotesAmount, InGameNotesAmount));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("%d/%d collected"), CollectedNotesAmount, InGameNotesAmount));
 }
 
 int32 ASMGameStateBase::CalculateInGameNotes()

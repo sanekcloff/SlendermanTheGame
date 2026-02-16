@@ -23,16 +23,6 @@ void ASMGameModeBase::StartGame()
 	}
 }
 
-//void ASMGameModeBase::PauseGame()
-//{
-//
-//	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
-//	{
-//		PC->SetInputMode(FInputModeUIOnly());
-//		PC->bShowMouseCursor = true;
-//	}
-//}
-
 void ASMGameModeBase::EndGame()
 {
 	GetSMGameStateBase()->SetGameState(ESMGameState::GameOver);
