@@ -7,27 +7,26 @@
 
 void USMGameInstance::LoadMainMenu()
 {
-    if (CurrentLevelName == MainMenuLevelName) return;
-    CurrentLevelName = MainMenuLevelName;
-    UGameplayStatics::OpenLevel(GetWorld(), MainMenuLevelName);
+	if (CurrentLevelName != MainMenuLevelName)
+		CurrentLevelName = MainMenuLevelName;
+	UGameplayStatics::OpenLevel(GetWorld(), MainMenuLevelName);
 }
 
 void USMGameInstance::LoadTestLevel()
 {
-    if (CurrentLevelName == MainMenuLevelName) return;
-    CurrentLevelName = TestLevelName;
-    UGameplayStatics::OpenLevel(GetWorld(), TestLevelName);
+	if (CurrentLevelName != TestLevelName)
+		CurrentLevelName = TestLevelName;
+	UGameplayStatics::OpenLevel(GetWorld(), TestLevelName);
 }
 
 void USMGameInstance::LoadGameLevel()
 {
-    if (CurrentLevelName == MainMenuLevelName) return;
-    CurrentLevelName = GameLevelName;
-    UGameplayStatics::OpenLevel(GetWorld(), GameLevelName);
+	if (CurrentLevelName != GameLevelName)
+		CurrentLevelName = GameLevelName;
+	UGameplayStatics::OpenLevel(GetWorld(), GameLevelName);
 }
 
 void USMGameInstance::QuitGame()
 {
-    if (CurrentLevelName == MainMenuLevelName) return;
-    UKismetSystemLibrary::QuitGame(GetWorld(),GetWorld()->GetFirstPlayerController(),EQuitPreference::Quit,true);
+	UKismetSystemLibrary::QuitGame(GetWorld(), GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit, true);
 }

@@ -28,6 +28,20 @@ void ASMGameModeBase::EndGame()
 	GetSMGameStateBase()->SetGameState(ESMGameState::GameOver);
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
+		PC->SetIgnoreMoveInput(true);
+		PC->SetIgnoreLookInput(true);
+
+		if (APawn* ControlledPawn = PC->GetPawn())
+		{
+			if (ACharacter* Character = Cast<ACharacter>(ControlledPawn))
+			{
+				Character->GetCharacterMovement()->StopMovementImmediately();
+
+				// Дополнительно: отключаем вращение
+				Character->bUseControllerRotationYaw = false;
+			}
+		}
+
 		PC->SetInputMode(FInputModeUIOnly());
 		PC->bShowMouseCursor = true;
 	}
@@ -39,6 +53,12 @@ bool ASMGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDele
 	if (PauseSet)
 	{
 		GetSMGameStateBase()->SetGameState(ESMGameState::Paused);
+
+		if (PC)
+		{
+			PC->bShowMouseCursor = true;
+			PC->SetInputMode(FInputModeGameAndUI());
+		}
 	}
 	return PauseSet;
 }
@@ -49,8 +69,20 @@ bool ASMGameModeBase::ClearPause()
 	if (PauseCleared)
 	{
 		GetSMGameStateBase()->SetGameState(ESMGameState::InProgress);
+
+		if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+		{
+			PC->bShowMouseCursor = false;
+			PC->SetInputMode(FInputModeGameOnly());
+		}
 	}
 	return PauseCleared;
+}
+
+void ASMGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+	StartGame();
 }
 
 ASMGameStateBase* ASMGameModeBase::GetSMGameStateBase() const

@@ -24,6 +24,11 @@ public:
 	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
 
 	virtual bool ClearPause() override;
+
+protected:
+	virtual void BeginPlay() override;
+
+
 private:
 	UFUNCTION()
 	ASMGameStateBase* GetSMGameStateBase() const;
