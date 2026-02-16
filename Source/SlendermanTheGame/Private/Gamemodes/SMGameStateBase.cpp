@@ -16,6 +16,11 @@ int32 ASMGameStateBase::GetCollectedNotesAmount() const
 	return CollectedNotesAmount;
 }
 
+ESMGameState ASMGameStateBase::GetSMGameState() const
+{
+	return GameState;
+}
+
 void ASMGameStateBase::IncreaseCollectedNotesAmount()
 {
 	CollectedNotesAmount = FMath::Clamp(++CollectedNotesAmount, 0, InGameNotesAmount);

@@ -48,7 +48,7 @@ void USMGameOverWidget::OnMainMenuLevelButtonClicked()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Main menu level name is none!"));
 		return;
 	}
-	GameInst->LoadGameLevel();
+	GameInst->LoadMainMenu();
 }
 
 void USMGameOverWidget::OnQuitButtonClicked()

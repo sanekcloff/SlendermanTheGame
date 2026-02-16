@@ -38,6 +38,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GameSession|State")
 	void SetGameState(ESMGameState State);
+
+	UFUNCTION(BlueprintCallable, Category = "GameSession|State")
+	ESMGameState GetSMGameState() const;
 	
 
 protected:

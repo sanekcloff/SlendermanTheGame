@@ -32,10 +32,21 @@ void ASMPlayerHUD::BeginPlay()
 		if (const auto GameState = Cast<ASMGameStateBase>(GetWorld()->GetGameState()))
 		{
 			GameState->OnGameStateChanged.AddUObject(this, &ASMPlayerHUD::OnGameStateChanged);
-		}
-		if (auto Gamemode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
-		{
-			Gamemode->StartGame();
+
+			ESMGameState CurrentState = GameState->GetSMGameState(); // или GetSMGameState(), смотря как называется метод
+			FString StateString = TEXT("Unknown");
+
+			// Получаем имя enum'а через рефлексию
+			if (UEnum* EnumPtr = StaticEnum<ESMGameState>())
+			{
+				StateString = EnumPtr->GetNameStringByValue((int64)CurrentState);
+			}
+
+			// Сообщение на экран
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,
+				FString::Printf(TEXT("Current GameState: %s"), *StateString));
+
+			OnGameStateChanged(GameState->GetSMGameState());
 		}
 	}
 }

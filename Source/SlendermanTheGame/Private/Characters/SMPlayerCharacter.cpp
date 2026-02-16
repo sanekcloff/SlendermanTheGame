@@ -11,8 +11,8 @@
 #include "Components/SMStaminaComponent.h"
 #include "Components/SMMindComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Gamemodes/SMGameStateBase.h"
-#include "Interactables/SMInteractableNote.h"
+#include "Gamemodes/SMGameModeBase.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ASMPlayerCharacter::ASMPlayerCharacter()
@@ -73,6 +73,7 @@ void ASMPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASMPlayerCharacter::Move);
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASMPlayerCharacter::Look);
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::Interact);
+		Input->BindAction(PauseAction, ETriggerEvent::Started, this, &ASMPlayerCharacter::TogglePause);
 	}
 }
 
@@ -150,6 +151,28 @@ void ASMPlayerCharacter::RegainMind()
 	if (MindComponent)
 		MindComponent->StopUsingResource();
 }
+
+void ASMPlayerCharacter::TogglePause()
+{
+	if (!GetWorld()) return;
+
+	if (UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		if (ASMGameModeBase* CurrentGameMode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			CurrentGameMode->ClearPause();
+		}
+	}
+	else
+	{
+		if (ASMGameModeBase* CurrentGameMode = Cast<ASMGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			CurrentGameMode->SetPause(Cast<APlayerController>(GetController()));
+		}
+	}
+	
+}
+
 
 bool ASMPlayerCharacter::IsMustRun() const
 {

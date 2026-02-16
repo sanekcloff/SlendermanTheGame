@@ -65,6 +65,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Actions")
 	UInputAction* RunAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Actions")
+	UInputAction* PauseAction;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interaction")
 	float InteractDistance = 250.0f;
 
@@ -80,5 +83,6 @@ private:
 	void StopRun();
 	void LoseMind();
 	void RegainMind();
+	void TogglePause();
 
 };
